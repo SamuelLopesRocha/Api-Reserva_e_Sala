@@ -1,4 +1,4 @@
-package sala
+package models      // vai ser importado como "models.Sala"
 
 type Sala struct {
     SalaID   uint   `json:"sala_id" gorm:"primaryKey;autoIncrement"`   // ID primário gerado automatico
