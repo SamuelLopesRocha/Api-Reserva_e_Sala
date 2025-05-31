@@ -37,7 +37,7 @@ Descrição: Permite a criação de turmas com possibilidade de associar uma sal
 Integração: A API de Turmas realiza uma requisição GET para verificar salas disponíveis.
 
 ✅ Endpoint consultado:
-GET http://localhost:6000/salas
+GET http://api_sala:6000/salas
 Se a sala for válida, a turma pode ser criada com uma sala atribuída. Caso contrário, a turma será criada, mas sem sala.
 
 📬 Endpoints
