@@ -2,6 +2,9 @@
 
 ## 📌 Descrição
 
+Relacionamento direto com a API school system
+
+
 Esta API é responsável pela criação e listagem de **reservas** e **salas**.  
 Ela valida a existência da sala antes de permitir a criação de uma reserva.  
 Além disso, ao criar uma turma, é possível atribuir uma sala específica.
