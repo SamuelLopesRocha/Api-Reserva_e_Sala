@@ -52,16 +52,15 @@ Exemplo de corpo (JSON):
     "sala_id": 1,
     "turma_id": 10
   }
-
 Resposta:
 {
   "mensagem": "Turma criada com sucesso"
+}
 
 🔹 GET /reserva/
 Lista todas as reservas realizadas.
 
 Exemplo de resposta (JSON):
-[
   {
     "reserva_id": 1,
     "data_reserva": "2031-10-14",
@@ -71,9 +70,11 @@ Exemplo de resposta (JSON):
       "sala_id": 1,
       "recursos": "Computador",
       "ativo": true
-    }
-  }
-]
+    } 
+  Resposta:
+{
+  "mensagem": "Turma criada com sucesso"
+}
 
 
 🛠️ Tecnologias Utilizadas
