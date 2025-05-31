@@ -23,6 +23,10 @@ A aplicação foi desenvolvida com **Go (Gin Framework)**, segue o padrão **MVC
 ```bash
 git clone https://github.com/MarceloHenrique1711/Reserva-de-salas-Api.git
 cd Reserva-de-salas-Api
+
+antes de rodar o docker tem que rodar o seguinte comando no terminal bash:
+docker network create projeto-apis
+
 docker-compose up
 🌐 Integração com Microsserviços
 A API de Reservas faz parte de um ecossistema baseado em microsserviços. Atualmente, ela se comunica com o seguinte serviço externo:
