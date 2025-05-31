@@ -3,8 +3,10 @@ package controller
 import (
     "net/http"
     "strconv"
-
+    "fmt"
+    "encoding/json"
     "github.com/gin-gonic/gin"
+    "reserva_salas_api/config"
     "reserva_salas_api/models"
     "reserva_salas_api/repository"
 )
@@ -50,7 +52,30 @@ func GetSalaByID(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusOK, sala)
+    // --- Requisição para API de turmas ---
+    turmaInfo := map[string]interface{}{}
+    url := fmt.Sprintf("http://api_turma:5000/turmas/por_sala/%d", sala.SalaID)
+
+    resp, err := http.Get(url)
+    if err == nil && resp.StatusCode == 200 {
+        defer resp.Body.Close()
+        json.NewDecoder(resp.Body).Decode(&turmaInfo)
+    }
+
+    // Monta a resposta incluindo a turma, se houver
+    resposta := gin.H{
+        "sala_id":   sala.SalaID,
+        "recursos": sala.Recursos,
+        "ativo":     sala.Ativo,
+    }
+
+    if turmaInfo["turma_id"] != nil {
+        resposta["turma"] = turmaInfo
+    } else {
+        resposta["turma"] = nil
+    }
+
+    c.JSON(http.StatusOK, resposta)
 }
 
 // Atualizar sala
@@ -97,4 +122,20 @@ func DeleteSala(c *gin.Context) {
     }
 
     c.JSON(http.StatusOK, gin.H{"message": "Sala deletada com sucesso"})
+}
+
+
+func GetSalaDisponivel(c *gin.Context) {
+    var sala models.Sala
+
+    if err := config.DB.Where("ativo = ?", false).First(&sala).Error; err != nil {
+        c.JSON(http.StatusNotFound, gin.H{"erro": "Nenhuma sala disponível"})
+        return
+    }
+
+    // Marca como ativa e salva no banco
+    sala.Ativo = true
+    config.DB.Save(&sala)
+
+    c.JSON(http.StatusOK, sala)
 }

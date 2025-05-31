@@ -17,7 +17,10 @@ func ConnectDatabase() {
     }
 
     // Realiza o AutoMigrate apenas aqui (ou no app.go, mas não nos dois)
-    database.AutoMigrate(&models.Sala{})
+    database.AutoMigrate(
+    &models.Sala{},
+    &models.Reserva{},
+)
 
     DB = database
 }

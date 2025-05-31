@@ -1,4 +1,4 @@
-package sala
+package route
 
 import (
     "github.com/gin-gonic/gin"
@@ -13,5 +13,7 @@ func SalaRoutes(router *gin.Engine) {
         salaGroup.GET("/:id", controller.GetSalaByID)
         salaGroup.PUT("/:id", controller.UpdateSala)
         salaGroup.DELETE("/:id", controller.DeleteSala)
+        salaGroup.GET("/disponivel", controller.GetSalaDisponivel)
     }
+    
 }
