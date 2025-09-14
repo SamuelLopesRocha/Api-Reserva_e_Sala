@@ -1,53 +1,63 @@
 # 🏫 API de Reservas
 
-## 📌 Descrição
+API desenvolvida em **Go** com o framework **Gin**, responsável pela criação e listagem de **salas** e **reservas**. Valida a existência de uma sala antes de permitir a criação de uma reserva e permite associar salas a turmas via integração com a **API School System**.
 
-Relacionamento direto com a API school system
+## 📌 Descrição Geral
 
+Esta API:
 
-Esta API é responsável pela criação e listagem de **reservas** e **salas**.  
-Ela valida a existência da sala antes de permitir a criação de uma reserva.  
-Além disso, ao criar uma turma, é possível atribuir uma sala específica.
-
-Os dados são armazenados localmente utilizando **SQLite**.  
-A aplicação foi desenvolvida com **Go (Gin Framework)**, segue o padrão **MVC** e está totalmente **conteinerizada com Docker**, facilitando sua integração em um ambiente de **microsserviços**.
-
----
+- Gerencia salas e reservas.
+- Valida a existência de salas ao criar reservas.
+- Permite criar turmas já associadas a uma sala (via outro serviço).
+- Armazena dados localmente com **SQLite**.
+- Segue o padrão arquitetural **MVC**.
+- Está totalmente conteinerizada com **Docker**.
 
 ## 🚀 Como Executar com Docker
 
 ### Pré-requisitos
 
 - Docker e Docker Compose instalados
-- Ter a API de Turmas ativa
+- Ter a **API de Turmas** ativa
 
-### Passos
+### Passos para Execução
 
 ```bash
 git clone https://github.com/MarceloHenrique1711/Reserva-de-salas-Api.git
 cd Reserva-de-salas-Api
 
-antes de rodar o docker tem que rodar o seguinte comando no terminal bash:
+# Criar rede docker compartilhada entre APIs
 docker network create projeto-apis
 
+# Iniciar os containers
 docker-compose up
-🌐 Integração com Microsserviços
-A API de Reservas faz parte de um ecossistema baseado em microsserviços. Atualmente, ela se comunica com o seguinte serviço externo:
+```
 
-🔗 Serviço de Turmas
-Descrição: Permite a criação de turmas com possibilidade de associar uma sala.
+## 🌐 Integração com Microsserviços
 
-Integração: A API de Turmas realiza uma requisição GET para verificar salas disponíveis.
+Esta API integra-se com o seguinte serviço externo:
 
-✅ Endpoint consultado:
-GET http://api_sala:6000/salas
-Se a sala for válida, a turma pode ser criada com uma sala atribuída. Caso contrário, a turma será criada, mas sem sala.
+### 🔗 Serviço de Turmas
 
-📬 Endpoints
-🔹 GET /sala/
-Cria uma nova sala, com turma podendo ser atribuida a uma sala.
+- **Descrição**: Criação de turmas com possibilidade de associar uma sala.
+- **Integração**: A API de Turmas faz requisições GET para a API de Reservas.
+- **Endpoint Consultado**:
+  ```http
+  GET http://api_sala:6000/salas
+  ```
 
-Exemplo de corpo (JSON):
+- Se a sala for válida, a turma será criada com sala atribuída.
+- Se inválida, a turma será criada sem sala.
+
+## 📬 Endpoints
+
+### 🔹 `GET /sala/`
+
+Cria uma nova sala (pode incluir dados da turma associada).
+
+**Exemplo de JSON enviado:**
+
+```json
 {
   "ativo": true,
   "recursos": "Projetor",
@@ -59,46 +69,50 @@ Exemplo de corpo (JSON):
     "sala_id": 1,
     "turma_id": 10
   }
-Resposta:
+}
+```
+
+**Resposta esperada:**
+
+```json
 {
   "mensagem": "Turma criada com sucesso"
 }
+```
 
-🔹 GET /reserva/
-Lista todas as reservas realizadas.
+---
 
-Exemplo de resposta (JSON):
-  {
-    "reserva_id": 1,
-    "data_reserva": "2031-10-14",
-    "descricao": "Reunião",
+### 🔹 `GET /reserva/`
+
+Lista todas as reservas cadastradas.
+
+**Exemplo de resposta:**
+
+```json
+{
+  "reserva_id": 1,
+  "data_reserva": "2031-10-14",
+  "descricao": "Reunião",
+  "sala_id": 1,
+  "sala": {
     "sala_id": 1,
-    "sala": {
-      "sala_id": 1,
-      "recursos": "Computador",
-      "ativo": true
-    } 
-  Resposta:
-{
-  "mensagem": "Turma criada com sucesso"
+    "recursos": "Computador",
+    "ativo": true
+  }
 }
+```
 
+## 🛠️ Tecnologias Utilizadas
 
-🛠️ Tecnologias Utilizadas
-Go 1.24
+- Go 1.24
+- Gin (Framework Web)
+- SQLite (Banco de Dados)
+- Docker & Docker Compose
+- Arquitetura MVC
 
-Gin (Framework)
+## 🏗️ Estrutura do Projeto
 
-SQLite
-
-Docker / Docker Compose
-
-Padrão MVC
-
-🏗️ Arquitetura
-A aplicação segue o padrão MVC (Model-View-Controller).
-
-Estrutura de Diretórios
+```
 .
 ├── config/ 
 │   └── config.go   
@@ -123,3 +137,4 @@ Estrutura de Diretórios
 ├── banco.db 
 ├── go.mod
 └── go.sum
+```
